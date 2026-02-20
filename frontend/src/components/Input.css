@@ -1,0 +1,86 @@
+.input-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.input-wrapper {
+  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.input-wrapper:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.input-wrapper.input-focused {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(0, 212, 170, 0.1);
+}
+
+.input-group.input-error .input-wrapper {
+  border-color: var(--danger);
+}
+
+.input-field {
+  width: 100%;
+  padding: 1.1rem 1rem 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.input-field::placeholder {
+  color: transparent;
+}
+
+.input-label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 1rem;
+  font-weight: 400;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.input-label.label-active {
+  top: 0.6rem;
+  transform: translateY(0);
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.input-wrapper.input-focused .input-label:not(.label-active) {
+  color: var(--accent);
+}
+
+.required {
+  color: var(--danger);
+}
+
+.input-error-message {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--danger);
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: slideIn 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+  .input-field {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
