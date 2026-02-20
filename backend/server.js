@@ -26,6 +26,21 @@ app.use('/api', balanceRoutes);
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Kodbank API Server',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: {
+      health: '/health',
+      register: 'POST /api/register',
+      login: 'POST /api/login',
+      logout: 'POST /api/logout',
+      balance: 'GET /api/balance'
+    }
+  });
+});
+
 async function start() {
   try {
     console.log('Connecting to database...');
@@ -41,8 +56,9 @@ async function start() {
     
     await initDb();
     
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`Kodbank API running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (err) {
     console.error('Database connection failed:', err.message);
