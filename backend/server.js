@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const { initDb, pool } = require('./db');
 const authRoutes = require('./routes/auth');
 const balanceRoutes = require('./routes/balance');
+const aiRoutes = require('./routes/ai');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.use('/api', authRoutes);
 app.use('/api', balanceRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.get('/health', (req, res) => res.json({ ok: true }));
 
@@ -38,7 +40,8 @@ app.get('/', (req, res) => {
       register: 'POST /api/register',
       login: 'POST /api/login',
       logout: 'POST /api/logout',
-      balance: 'GET /api/balance'
+      balance: 'GET /api/balance',
+      aiChat: 'POST /api/ai/chat'
     }
   });
 });

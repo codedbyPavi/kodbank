@@ -5,22 +5,22 @@
 
 .input-wrapper {
   position: relative;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--glass-border);
   border-radius: var(--radius-sm);
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   overflow: hidden;
 }
 
 .input-wrapper:hover {
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .input-wrapper.input-focused {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(0, 212, 170, 0.1);
+  border-color: rgba(255, 215, 0, 0.5);
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.12);
 }
 
 .input-group.input-error .input-wrapper {
@@ -33,7 +33,7 @@
   background: transparent;
   border: none;
   outline: none;
-  color: var(--text-primary);
+  color: var(--text-light);
   font-size: 1rem;
   font-weight: 400;
 }
@@ -51,19 +51,19 @@
   font-size: 1rem;
   font-weight: 400;
   pointer-events: none;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .input-label.label-active {
   top: 0.6rem;
   transform: translateY(0);
   font-size: 0.75rem;
-  color: var(--accent);
+  color: var(--primary-yellow);
   font-weight: 500;
 }
 
 .input-wrapper.input-focused .input-label:not(.label-active) {
-  color: var(--accent);
+  color: var(--primary-yellow);
 }
 
 .required {
@@ -81,6 +81,6 @@
 
 @media (max-width: 768px) {
   .input-field {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
   }
 }

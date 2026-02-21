@@ -1,11 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
-import { FiDollarSign, FiRefreshCw } from 'react-icons/fi';
+import { FiDollarSign, FiRefreshCw, FiTrendingUp, FiSave, FiActivity } from 'react-icons/fi';
 import { api } from '../api/axios';
 import Button from '../components/Button';
+import Chatbot from '../components/Chatbot';
 import { animateCounter } from '../utils/animateCounter';
 import './Dashboard.css';
+
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good Morning';
+  if (hour < 17) return 'Good Afternoon';
+  return 'Good Evening';
+}
 
 function fireConfetti() {
   const count = 120;
@@ -20,6 +28,10 @@ function fireConfetti() {
   fire(0.1, { spread: 120, startVelocity: 45 });
 }
 
+const MOCK_SPENDING = 24500;
+const MOCK_SAVINGS = 12000;
+const MOCK_ACTIVITY_COUNT = 3;
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const [balance, setBalance] = useState(null);
@@ -28,17 +40,12 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    // Extract username from JWT token stored in cookie (we'll get it from balance response)
-    // For now, we'll fetch it when balance is loaded
-  }, []);
-
   const checkBalance = async () => {
     setLoading(true);
     setError('');
     setBalance(null);
     setDisplayBalance(0);
-    
+
     try {
       const { data } = await api.get('/api/balance');
       if (data.success) {
@@ -47,8 +54,6 @@ export default function Dashboard() {
           setUsername(data.username);
         }
         fireConfetti();
-        
-        // Animate counter
         animateCounter(data.balance, 1500, (value) => {
           setDisplayBalance(value);
         });
@@ -72,52 +77,107 @@ export default function Dashboard() {
     }).format(n);
   };
 
+  const formatCurrency = (n) =>
+    new Intl.NumberFormat('en-IN', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(n);
+
   return (
     <div className="dashboard-container">
+      <div className="dashboard-shapes" aria-hidden="true">
+        <div className="shape shape--1" />
+        <div className="shape shape--2" />
+        <div className="shape shape--3" />
+      </div>
+
       <div className="dashboard-content fade-in">
-        <div className="dashboard-header">
-          <div>
-            <h1 className="dashboard-title">
-              {username ? `Welcome back, ${username}!` : 'Welcome back!'}
-            </h1>
-            <p className="dashboard-subtitle">Manage your finances with ease</p>
+        <div className="dashboard-welcome-card glass-card">
+          <h1 className="dashboard-title">
+            {getGreeting()}, {username || 'there'} 👋
+          </h1>
+          <p className="dashboard-subtitle">Manage your finances with ease</p>
+        </div>
+
+        <div className="dashboard-cards">
+          <div className={`dashboard-card glass-card dashboard-card--balance ${balance !== null ? 'balance-reveal' : ''}`}>
+            <div className="dashboard-card__header">
+              <div className="dashboard-card__icon dashboard-card__icon--yellow">
+                <FiDollarSign />
+              </div>
+              <span className="dashboard-card__label">Account Balance</span>
+            </div>
+            <div className="dashboard-card__value">
+              {balance !== null ? (
+                <>
+                  <span className="currency">₹</span>
+                  <span className="amount">{formatBalance(displayBalance)}</span>
+                </>
+              ) : (
+                <span className="amount amount--placeholder">—</span>
+              )}
+            </div>
+            <Button
+              onClick={checkBalance}
+              loading={loading}
+              disabled={loading}
+              className="balance-button btn-pill btn-primary"
+            >
+              <FiRefreshCw className={loading ? 'spinning' : ''} />
+              <span>{loading ? 'Loading...' : 'Check Balance'}</span>
+            </Button>
+            {balance !== null && (
+              <div className="balance-footer balance-footer--card">
+                <span className="balance-status">Active Account</span>
+              </div>
+            )}
+          </div>
+
+          <div className="dashboard-card glass-card">
+            <div className="dashboard-card__header">
+              <div className="dashboard-card__icon">
+                <FiTrendingUp />
+              </div>
+              <span className="dashboard-card__label">Monthly Spending</span>
+            </div>
+            <div className="dashboard-card__value">
+              <span className="currency">₹</span>
+              <span className="amount">{formatCurrency(MOCK_SPENDING)}</span>
+            </div>
+            <p className="dashboard-card__hint">This month</p>
+          </div>
+
+          <div className="dashboard-card glass-card">
+            <div className="dashboard-card__header">
+              <div className="dashboard-card__icon">
+                <FiSave />
+              </div>
+              <span className="dashboard-card__label">Savings</span>
+            </div>
+            <div className="dashboard-card__value">
+              <span className="currency">₹</span>
+              <span className="amount">{formatCurrency(MOCK_SAVINGS)}</span>
+            </div>
+            <p className="dashboard-card__hint">Total saved</p>
+          </div>
+
+          <div className="dashboard-card glass-card">
+            <div className="dashboard-card__header">
+              <div className="dashboard-card__icon">
+                <FiActivity />
+              </div>
+              <span className="dashboard-card__label">Activity</span>
+            </div>
+            <div className="dashboard-card__value">
+              <span className="amount amount--activity">{MOCK_ACTIVITY_COUNT}</span>
+              <span className="dashboard-card__suffix">transactions</span>
+            </div>
+            <p className="dashboard-card__hint">Last 7 days</p>
           </div>
         </div>
 
-        <div className="balance-section">
-          <Button
-            onClick={checkBalance}
-            loading={loading}
-            disabled={loading}
-            className="balance-button"
-          >
-            <FiRefreshCw className={loading ? 'spinning' : ''} />
-            <span>{loading ? 'Loading...' : 'Check Balance'}</span>
-          </Button>
-
-          {error && (
-            <div className="error-message">{error}</div>
-          )}
-
-          {balance !== null && (
-            <div className="balance-card scale-in">
-              <div className="balance-card-header">
-                <div className="balance-icon">
-                  <FiDollarSign />
-                </div>
-                <div className="balance-label">Account Balance</div>
-              </div>
-              <div className="balance-amount">
-                <span className="currency">₹</span>
-                <span className="amount">{formatBalance(displayBalance)}</span>
-              </div>
-              <div className="balance-footer">
-                <span className="balance-status">Active Account</span>
-              </div>
-            </div>
-          )}
-        </div>
+        {error && (
+          <div className="error-message error-message--dashboard">{error}</div>
+        )}
       </div>
+      <Chatbot />
     </div>
   );
 }

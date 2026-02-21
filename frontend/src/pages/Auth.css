@@ -15,31 +15,32 @@
   right: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(0, 212, 170, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.06) 0%, transparent 65%);
   animation: rotate 20s linear infinite;
 }
 
 @keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .auth-card {
   width: 100%;
   max-width: 450px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
   padding: 2.5rem;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--glass-shadow);
   position: relative;
   z-index: 1;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.auth-card:hover {
+  box-shadow: var(--glass-shadow), 0 0 40px rgba(255, 215, 0, 0.08);
 }
 
 .auth-header {
@@ -58,26 +59,24 @@
 .logo-icon-large {
   width: 64px;
   height: 64px;
-  background: var(--gradient-accent);
-  border-radius: var(--radius);
+  background: var(--gradient-yellow);
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 2rem;
-  color: white;
-  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  color: #0B0B0F;
+  box-shadow: 0 0 28px rgba(255, 215, 0, 0.4);
   animation: scaleIn 0.5s ease-out;
 }
 
 .auth-logo h1 {
   font-size: 2rem;
   font-weight: 700;
-  background: var(--gradient-accent);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-light);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .auth-subtitle {
@@ -93,7 +92,7 @@
 
 .error-message {
   background: rgba(255, 107, 107, 0.1);
-  border: 1px solid rgba(255, 107, 107, 0.3);
+  border: 1px solid rgba(255, 107, 107, 0.25);
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
   color: var(--danger);
@@ -111,13 +110,13 @@
 }
 
 .auth-footer a {
-  color: var(--accent);
+  color: var(--primary-yellow);
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .auth-footer a:hover {
-  color: var(--accent-hover);
+  color: var(--accent-yellow);
   text-decoration: underline;
 }
 
@@ -125,11 +124,11 @@
   .auth-card {
     padding: 2rem 1.5rem;
   }
-  
+
   .auth-logo h1 {
     font-size: 1.75rem;
   }
-  
+
   .logo-icon-large {
     width: 56px;
     height: 56px;
